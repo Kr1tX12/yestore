@@ -1,5 +1,5 @@
-import { LoginForm } from "@/components/login-form"
-import { SignUpForm } from "@/components/sign-up-form"
+import { LoginForm } from "@/components/user/sign-in/login-form";
+import { SignUpForm } from "@/pages/sign-up/sign-up/index";
 
 export default function LoginPage() {
   return (
@@ -14,13 +14,13 @@ export default function LoginPage() {
       <div className="relative hidden bg-muted lg:block">
         <img
           src="https://avatars.mds.yandex.net/i?id=41e15638611417c9450a293fed78208b_l-4885523-images-thumbs&n=13"
-          alt="Image" 
+          alt="Image"
           className="absolute inset-0 object-cover size-full dark:brightness-[0.2] dark:grayscale"
         />
         <p className="text-3xl font-black absolute flex justify-center items-center size-full text-center px-10">
-          Лучшие сервера в мире ваще топ рекомендую заходи пока вот слева 
+          Лучшие сервера в мире ваще топ рекомендую заходи пока вот слева
         </p>
       </div>
     </div>
-  )
+  );
 }
