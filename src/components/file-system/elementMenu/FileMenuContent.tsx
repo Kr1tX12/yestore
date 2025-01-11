@@ -38,15 +38,19 @@ const FileMenuContent = ({
 
   const { singleSelected } = useSingleSelected();
   const { selected } = useSelected();
-  
-  const allSelected = !selected || selected?.length === 0 ? [singleSelected] : selected;
 
+  const allSelected =
+    !selected || selected?.length === 0 ? [singleSelected] : selected;
 
   return (
     <MenuComponent>
       <LabelComponent className="flex gap-2 items-center">
         <FilesIcon className="size-4" />
-        <span className="text-xs font-normal">{getWordEnding(allSelected?.length, ['Выбран', 'Выбрано', 'Выбрано'])} {allSelected?.length} {getWordEnding(allSelected?.length, ['файл', 'файла', 'файлов'])}</span>
+        <span className="text-xs font-normal">
+          {getWordEnding(allSelected?.length, ["Выбран", "Выбрано", "Выбрано"])}{" "}
+          {allSelected?.length}{" "}
+          {getWordEnding(allSelected?.length, ["файл", "файла", "файлов"])}
+        </span>
       </LabelComponent>
       <SeparatorComponent className="my-1" />
       <AdvancedMenuItem isContextMenu={isContextMenu}>Открыть</AdvancedMenuItem>

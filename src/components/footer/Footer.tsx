@@ -69,6 +69,7 @@ const Footer = () => {
           <ul className="flex flex-col items-start gap-2 mx-2">
             {socialMediaItems.map((item) => (
               <Link
+                key={item.name}
                 href={item.href}
                 className="hover:text-sky-100 transition-all flex gap-2 items-center"
               >

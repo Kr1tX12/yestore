@@ -16,17 +16,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DollarSignIcon, LayoutDashboardIcon, SettingsIcon } from "lucide-react";
 import UserProfile from "./UserProfile";
+import { useUser } from "../auth/user-provider";
 
 const DropdownUserProfile = () => {
+  const user = useUser();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="size-8">
+        <Avatar className="size-8 cursor-pointer">
           <AvatarImage
             className="object-cover cursor-pointer"
-            src="https://steamuserimages-a.akamaihd.net/ugc/2100422066956953334/BCFFD0DB0C56F71CD288304540E39FC2FADFD155/?imw=512&imh=341&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true"
+            src={user?.avatar}
           />
-          <AvatarFallback>AB</AvatarFallback>
+          <AvatarFallback>{user?.fullname[0]}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">

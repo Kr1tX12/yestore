@@ -3,6 +3,7 @@ export type FileType = {
     name: string;
     extension: string;
     size: number;
+    lastModified: Date;
 };
 
 export type FolderType = {

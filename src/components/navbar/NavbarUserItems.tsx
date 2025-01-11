@@ -1,33 +1,41 @@
 import React from "react";
 import NavbarItemsListContainer from "./NavbarItemsListContainer";
-import { NavbarItem, NavbarItemForm } from "./NavbarConstants";
 import UserProfile from "../user/DropdownUserProfile";
 import { NavbarItemLink } from "./NavbarItems";
+import { useUser } from "../auth/user-provider";
+import { Loader2Icon } from "lucide-react";
 
-const isLoggedIn = false;
 const NavbarUserItems = () => {
+  const user = useUser();
+  const isLoggedIn: "yes" | "loading" | "no" =
+    user === null ? "loading" : user === undefined ? "no" : "yes";
+
   return (
     <NavbarItemsListContainer>
-      {isLoggedIn ? (
-        <UserProfile />
-      ) : (
-        <>
-          <NavbarItemLink
-            navbarItem={{
-              label: "Sign in",
-              href: "/sign-in",
-            }}
-            isActivated={false}
-          />
-          <NavbarItemLink
-            navbarItem={{
-              label: "Sign up",
-              href: "/sign-up",
-            }}
-            isActivated={false}
-          />
-        </>
-      )}
+      {
+        {
+          yes: <UserProfile />,
+          no: (
+            <>
+              <NavbarItemLink
+                navbarItem={{
+                  label: "Sign in",
+                  href: "/sign-in",
+                }}
+                isActivated={false}
+              />
+              <NavbarItemLink
+                navbarItem={{
+                  label: "Sign up",
+                  href: "/sign-up",
+                }}
+                isActivated={false}
+              />
+            </>
+          ),
+          loading: <Loader2Icon className="animate-spin" />,
+        }[isLoggedIn]
+      }
     </NavbarItemsListContainer>
   );
 };
