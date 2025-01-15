@@ -46,7 +46,7 @@ const LatestFiles = () => {
             </CardDescription>
         </CardHeader>
         <CardContent>
-            <ScrollArea className='h-96'>
+            <ScrollArea className='h-96 pr-4'>
               <FilesTable table={filteredTableData} />
             </ScrollArea>
         </CardContent>
