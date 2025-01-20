@@ -1,7 +1,7 @@
 "use client";
 
 import { TypewriterEffectSmooth } from "@/components/aceternity/TypewriterEffect";
-import FileSystemDemo from "@/components/file-system/FileSystemDemo";
+import { FileSystemDemo } from "@/components/fileSystems/file-system/_index";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
@@ -52,7 +52,10 @@ const FileSystemPart = () => {
 
   return (
     <section className="max-w-7xl w-full">
-      <div className="flex flex-col gap-2 justify-center items-center" ref={containerRef}>
+      <div
+        className="flex flex-col gap-2 justify-center items-center"
+        ref={containerRef}
+      >
         <TypewriterEffectSmooth words={words} />
         <FileSystemDemo className="w-full" height={400} />
       </div>

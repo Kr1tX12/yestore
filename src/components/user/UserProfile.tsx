@@ -20,7 +20,7 @@ const UserProfile = ({ className }: { className?: string }) => {
         <p className="truncate max-w-[80px]">{user?.fullname}</p>
       </div>
       <div className="flex flex-col items-center justify-center w-full max-w-20 gap-0 pb-2 translate-y-0">
-        <p className="text-[8px] text-zinc-400 text-center h-4 translate-y-1">2GB / 4GB</p>
+        <p className="text-[8px] text-zinc-400 text-center h-4">2GB / 4GB</p>
         <Progress value={50} />
       </div>
     </div>

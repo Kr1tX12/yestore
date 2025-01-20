@@ -7,7 +7,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import FileSystemDemo from "../../components/file-system/FileSystemDemo";
+import FileSystemDemo from "../../components/fileSystems/file-system/FileSystemDemo";
 import { DemoChart } from "./components/DemoChart";
 import {
   CodesandboxIcon,
@@ -55,7 +55,7 @@ const HeroPage = () => {
             <span className="text-orange-50 font-semibold">надежность</span>
           </p>
 
-         {/* <div className="max-w-96 w-full">
+          {/* <div className="max-w-96 w-full">
             <FileSystemDemo />
           </div> */}
         </div>

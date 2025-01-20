@@ -16,7 +16,7 @@ import {
   FilesIcon,
 } from "lucide-react";
 import AdvancedMenuItem from "./AdvancedMenuItem";
-import { FileType } from "../types";
+import { FileType } from "../../types";
 import { useSingleSelected } from "../context/SingleSelectedContext";
 import { useSelected } from "../context/SelectedContext";
 import { getWordEnding } from "@/lib/utils";

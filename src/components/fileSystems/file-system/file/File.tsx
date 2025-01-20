@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
 import {
@@ -8,8 +10,8 @@ import { EllipsisVertical } from "lucide-react";
 import clsx from "clsx";
 import { useMemo, useRef } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { FileType } from "../types";
-import { getIconForFile } from "../utils";
+import { FileType } from "../../types";
+import { getIconForFile } from "../../utils";
 import FileMenuContent from "../elementMenu/FileMenuContent";
 import { useFileLogic } from "./useFileLogic";
 import { useSingleSelected } from "../context/SingleSelectedContext";
@@ -47,7 +49,7 @@ const File = ({ file }: { file: FileType }) => {
 
   const FileIcon = useMemo(() => {
     return getIconForFile(file);
-  }, [file])
+  }, [file]);
 
   return (
     <li className="flex w-full items-center ml-2">

@@ -29,7 +29,7 @@ const DashboardSidebar = () => {
   return (
     <Sidebar className="z-[120]">
       <SidebarHeader>
-        <Button className="" variant="ghost">
+        <Button variant="ghost">
           <Logo />
         </Button>
       </SidebarHeader>

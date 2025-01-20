@@ -61,7 +61,7 @@ const OtherStats = () => {
   return (
     <div className="flex gap-8 border border-border px-5 py-5 rounded-md">
       {otherStats.map((stat, index) => (
-        <div key={index} className="flex flex-col flex-gap-2 items-center hover:scale-105 hover:scale-105 transition-transform">
+        <div key={index} className="flex flex-col flex-gap-2 items-center hover:scale-105 transition-transform">
           <stat.icon />
           <span className="font-bold text-3xl -mb-1">{stat.title}</span>
           <span className="text-xs text-stone-400">{stat.name}</span>

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import {
   Card,
   CardContent,
@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import React from "react";
-import { FileType } from "@/components/file-system/types";
+import { FileType } from "@/components/fileSystems/types";
 
 import { CircleAlert, TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
@@ -249,7 +249,8 @@ export function MostBiggestFiles() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 items-center font-medium leading-none ml-2">
-        <CircleAlert className="size-4" /> Эти файлы занимают <span className="text-rose-200">32GB / 38GB</span>
+          <CircleAlert className="size-4" /> Эти файлы занимают{" "}
+          <span className="text-rose-200">32GB / 38GB</span>
         </div>
       </CardFooter>
     </Card>

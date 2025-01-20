@@ -1,13 +1,15 @@
+'use client'
+
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { FolderType } from "../types";
+import { FolderType } from "../../types";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
-import { getIconForFolder, getItemsFromFolder } from "../utils";
+import { getIconForFolder, getItemsFromFolder } from "../../utils";
 import clsx from "clsx";
 
 const Folder = ({ folder, autoOpen = false }: { folder: FolderType, autoOpen?: boolean }) => {
@@ -39,7 +41,7 @@ const Folder = ({ folder, autoOpen = false }: { folder: FolderType, autoOpen?: b
           </Button>
         </CollapsibleTrigger>
         <CollapsibleContent className="border-l-zinc-800 border-l ml-5">
-          <ul className="flex flex-col gap-1">{getItemsFromFolder(folder, autoOpen)}</ul>
+          <ul className="flex flex-col gap-1">{getItemsFromFolder(folder, autoOpen, 'list')}</ul>
         </CollapsibleContent>
       </Collapsible>
     </li>

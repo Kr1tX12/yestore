@@ -14,9 +14,10 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DollarSignIcon, LayoutDashboardIcon, SettingsIcon } from "lucide-react";
+import { DollarSignIcon, LayoutDashboardIcon, LogOutIcon, SettingsIcon } from "lucide-react";
 import UserProfile from "./UserProfile";
 import { useUser } from "../auth/user-provider";
+import { signOutUser } from "@/lib/actions/user.actions";
 
 const DropdownUserProfile = () => {
   const user = useUser();
@@ -49,6 +50,13 @@ const DropdownUserProfile = () => {
           <DropdownMenuItem>
             <SettingsIcon />
             Settings
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem className="text-rose-400 hover:!text-rose-300" onClick={signOutUser}>
+            <LogOutIcon  />
+            Выйти
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

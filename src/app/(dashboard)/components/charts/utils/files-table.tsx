@@ -1,4 +1,4 @@
-import { FileType } from "@/components/file-system/types";
+import { FileType } from "@/components/fileSystems/types";
 import {
   Table,
   TableBody,
@@ -10,12 +10,10 @@ import {
 import { ImageIcon } from "lucide-react";
 import React from "react";
 
-
-
 const FilesTable = ({ table }: { table: Array<FileType> }) => {
   return (
     <Table>
-      <TableHeader >
+      <TableHeader>
         <TableRow className="sticky top-0">
           <TableHead>Файл</TableHead>
           <TableHead>Создан</TableHead>

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FileType } from "../types";
+import { FileType } from "../../types";
 import { useSelected } from "../context/SelectedContext";
 import gsap from "gsap";
 
