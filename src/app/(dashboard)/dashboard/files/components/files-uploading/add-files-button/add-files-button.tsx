@@ -2,11 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { UploadIcon } from "lucide-react";
-import { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import FileUploadingPanel from "./file-uploading-panel";
-import { useFiles } from "./providers/files-provider";
-import { useUploadingFiles } from "./providers/uploading-files-provider";
+import FileUploadingPanel from "../file-uploading-panel/file-uploading-panel";
+import { useAddFilesButton } from "./useAddFilesButton";
 
 const AddFilesButton = ({
   ownerId,
@@ -17,12 +14,7 @@ const AddFilesButton = ({
   accountId: string;
   className?: string;
 }) => {
-  const { files, setFiles } = useUploadingFiles();
-
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    setFiles(acceptedFiles);
-  }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, files } = useAddFilesButton();
 
   return (
     <>

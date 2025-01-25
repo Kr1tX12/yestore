@@ -21,20 +21,13 @@ import {
 import clsx from "clsx";
 import { HomeIcon } from "lucide-react";
 import React, { MouseEventHandler } from "react";
+import { BreadcrumbFile } from "./breadcrumb-file";
+import { useFilesBreadcrumb } from "./use-files-breadcrumb";
 
 const FilesBreadcrumb = ({ className }: { className?: string }) => {
-  const { path, setPath } = usePath();
-  console.log(path);
-
+  const { onClick, path } = useFilesBreadcrumb();
+  
   if (path && path.length <= 1) return null;
-
-  const onClick = (folder: FolderType) => {
-    if (!path) return;
-
-    const index = path?.indexOf(folder);
-    const newPath = path.slice(0, index + 1);
-    setPath(newPath);
-  };
 
   return (
     <Breadcrumb className={clsx("", className)}>
@@ -55,27 +48,6 @@ const FilesBreadcrumb = ({ className }: { className?: string }) => {
         })}
       </BreadcrumbList>
     </Breadcrumb>
-  );
-};
-
-const BreadcrumbFile = ({
-  folder,
-  active,
-  onClick,
-}: {
-  folder: FolderType;
-  active: boolean;
-  onClick: MouseEventHandler<HTMLButtonElement>;
-}) => {
-  return (
-    <BreadcrumbItem>
-      <button
-        onClick={onClick}
-        className={clsx("select-none", active && "text-white")}
-      >
-        {folder.name === "Home" ? <HomeIcon className="size-4" /> : folder.name}
-      </button>
-    </BreadcrumbItem>
   );
 };
 

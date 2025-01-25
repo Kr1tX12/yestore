@@ -4,15 +4,19 @@ import { FolderType } from "@/components/fileSystems/types";
 import { GridFileSystem } from "@/components/fileSystems/grid-file-system/_index";
 import { GridFileSystemProvider } from "@/components/fileSystems/grid-file-system/_index";
 import { Separator } from "@/components/ui/separator";
-import FilesBreadcrumb from "./components/files-breadcrumb";
+import FilesBreadcrumb from "./components/files-breadcrumb/files-breadcrumb";
 import { usePath } from "@/components/fileSystems/providers/PathContext";
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon, FolderIcon } from "lucide-react";
 import { getIconForFolder } from "@/components/fileSystems/utils";
 import SelectModeToggle from "./components/select-mode-toggle";
-import AddFilesButton from "./components/add-files-button";
+import AddFilesButton from "./components/files-uploading/add-files-button/add-files-button";
 import { FilesProvider } from "./components/providers/files-provider";
 import { UploadingFilesProvider } from "./components/providers/uploading-files-provider";
+import { FilesPageFlex } from "./components/files-page/files-page-flex";
+import { FileSystemOptions } from "./components/files-page/header/file-system-options";
+import { FilesPageHeader } from "./components/files-page/header/files-pages-header";
+import { FolderNowInfo } from "./components/files-page/header/folder-now-info";
 
 const rootFolder: FolderType = {
   id: "1",
@@ -124,55 +128,19 @@ const FilesPage = () => {
   return (
     <GridFileSystemProvider>
       <FilesProvider>
-        <FilesPageWithProvider />
+        <FilesPageFlex>
+          <FilesPageHeader>
+            <FolderNowInfo />
+            <FileSystemOptions />
+          </FilesPageHeader>
+
+          <Separator className="my-3" />
+          <FilesBreadcrumb className="ml-12 mb-6" />
+
+          <GridFileSystem rootFolder={rootFolder} hideFirst />
+        </FilesPageFlex>
       </FilesProvider>
     </GridFileSystemProvider>
-  );
-};
-
-const FilesPageWithProvider = () => {
-  const { path, setPath } = usePath();
-  const folderNow = path && path[path.length - 1];
-
-  const toPreviousPath = () => {
-    if (path && path?.length <= 1) return;
-
-    setPath(path?.slice(0, length - 1) ?? []);
-  };
-
-  const NowFolderIcon = folderNow ? getIconForFolder(folderNow) : FolderIcon;
-
-  return (
-    <div className="my-16 w-full flex flex-col">
-      <div className="flex w-full px-12 items-center justify-between">
-        <div className="flex w-full items-center gap-2">
-          {path && path.length > 1 && (
-            <Button onClick={toPreviousPath} variant="ghost" size="icon">
-              <ChevronLeftIcon />
-            </Button>
-          )}
-          <h1 className="text-2xl font-bold">
-            {folderNow && folderNow.name !== "Home" ? (
-              <span className="flex gap-2 items-center">
-                <NowFolderIcon /> {folderNow.name}
-              </span>
-            ) : (
-              "Все файлы"
-            )}
-          </h1>
-        </div>
-        <div className="flex gap-2 items-center">
-          <UploadingFilesProvider>
-            <AddFilesButton />
-          </UploadingFilesProvider>
-          <SelectModeToggle />
-        </div>
-      </div>
-      <Separator className="my-3" />
-      <FilesBreadcrumb className="ml-12 mb-6" />
-
-      <GridFileSystem rootFolder={rootFolder} hideFirst />
-    </div>
   );
 };
 
