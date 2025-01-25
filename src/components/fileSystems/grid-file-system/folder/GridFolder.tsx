@@ -4,9 +4,9 @@ import { FolderType } from "../../types";
 import { Button } from "@/components/ui/button";
 import { useMemo } from "react";
 import { getIconForFolder } from "../../utils";
-import { usePath } from "../context/PathContext";
-import { useSelected } from "../context/SelectedContext";
-import { useSingleSelected } from "../context/SingleSelectedContext";
+import { usePath } from "../../providers/PathContext";
+import { useSelected } from "../../providers/SelectedContext";
+import { useSingleSelected } from "../../providers/SingleSelectedContext";
 import clsx from "clsx";
 
 const GridFolder = ({ folder }: { folder: FolderType }) => {
@@ -84,7 +84,9 @@ const GridFolder = ({ folder }: { folder: FolderType }) => {
     >
       <div className="flex flex-col items-center justify-center">
         <FolderIcon className="size-10" />
-        <span className="text-xs text-stone-300 select-none">{folder.name}</span>
+        <span className="text-xs text-stone-300 select-none">
+          {folder.name}
+        </span>
       </div>
     </button>
   );

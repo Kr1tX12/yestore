@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { FileType, FolderType } from "../../types";
+import { FileType, FolderType } from "../types";
 
 type SelectedContextType = {
   selected: (FileType | FolderType)[] | null;

@@ -63,7 +63,7 @@ type SupportedExtensions =
   | "css"
   | "html";
 
-export const getIconForFile = (file: FileType) => {
+export const getIconForFile = (extension: string) => {
   const icons: Record<
     SupportedExtensions,
     ForwardRefExoticComponent<
@@ -85,7 +85,7 @@ export const getIconForFile = (file: FileType) => {
     html: FileCode,
   };
 
-  return icons[file.extension as SupportedExtensions] || FileIcon;
+  return icons[extension as SupportedExtensions] || FileIcon;
 };
 
 export const getIconForFolder = (folder: FolderType) => {
@@ -138,9 +138,11 @@ export const getIconForFolder = (folder: FolderType) => {
     }[mostUsedExtension] ?? FolderIcon
   );
 };
-
 export const convertToFileType = (file: File): FileType => {
-  const [name, extension] = file.name.split('.');
+  const lastDotIndex = file.name.lastIndexOf('.');
+  const name = lastDotIndex !== -1 ? file.name.substring(0, lastDotIndex) : file.name;
+  const extension = lastDotIndex !== -1 ? file.name.substring(lastDotIndex + 1) : '';
+
   return {
     id: crypto.randomBytes(16).toString('hex'),
     name: name,

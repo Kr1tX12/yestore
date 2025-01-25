@@ -5,12 +5,14 @@ import { GridFileSystem } from "@/components/fileSystems/grid-file-system/_index
 import { GridFileSystemProvider } from "@/components/fileSystems/grid-file-system/_index";
 import { Separator } from "@/components/ui/separator";
 import FilesBreadcrumb from "./components/files-breadcrumb";
-import { usePath } from "@/components/fileSystems/grid-file-system/context/PathContext";
+import { usePath } from "@/components/fileSystems/providers/PathContext";
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon, FolderIcon } from "lucide-react";
 import { getIconForFolder } from "@/components/fileSystems/utils";
 import SelectModeToggle from "./components/select-mode-toggle";
 import AddFilesButton from "./components/add-files-button";
+import { FilesProvider } from "./components/providers/files-provider";
+import { UploadingFilesProvider } from "./components/providers/uploading-files-provider";
 
 const rootFolder: FolderType = {
   id: "1",
@@ -121,7 +123,9 @@ const rootFolder: FolderType = {
 const FilesPage = () => {
   return (
     <GridFileSystemProvider>
-      <FilesPageWithProvider />
+      <FilesProvider>
+        <FilesPageWithProvider />
+      </FilesProvider>
     </GridFileSystemProvider>
   );
 };
@@ -158,7 +162,9 @@ const FilesPageWithProvider = () => {
           </h1>
         </div>
         <div className="flex gap-2 items-center">
-          <AddFilesButton />
+          <UploadingFilesProvider>
+            <AddFilesButton />
+          </UploadingFilesProvider>
           <SelectModeToggle />
         </div>
       </div>

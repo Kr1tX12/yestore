@@ -6,7 +6,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { CloudIcon, LayoutListIcon } from "lucide-react";
 import Folder from "./folder/Folder";
 import { FolderType } from "../types";
-import { useSelected } from "./context/SelectedContext";
+import { useSelected } from "../providers/SelectedContext";
 import { getItemsFromFolder } from "../utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import React from "react";

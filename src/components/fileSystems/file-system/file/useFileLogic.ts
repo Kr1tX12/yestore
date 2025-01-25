@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FileType } from "../../types";
-import { useSelected } from "../context/SelectedContext";
+import { useSelected } from "../../providers/SelectedContext";
 import gsap from "gsap";
 
 /**

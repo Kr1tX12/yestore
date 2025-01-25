@@ -1,6 +1,6 @@
 "use client";
 
-import { usePath } from "@/components/fileSystems/grid-file-system/context/PathContext";
+import { usePath } from "@/components/fileSystems/providers/PathContext";
 import { FolderType } from "@/components/fileSystems/types";
 import {
   Breadcrumb,
@@ -24,7 +24,7 @@ import React, { MouseEventHandler } from "react";
 
 const FilesBreadcrumb = ({ className }: { className?: string }) => {
   const { path, setPath } = usePath();
-  console.log(path)
+  console.log(path);
 
   if (path && path.length <= 1) return null;
 
@@ -35,7 +35,6 @@ const FilesBreadcrumb = ({ className }: { className?: string }) => {
     const newPath = path.slice(0, index + 1);
     setPath(newPath);
   };
-
 
   return (
     <Breadcrumb className={clsx("", className)}>

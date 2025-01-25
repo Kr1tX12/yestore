@@ -18,7 +18,7 @@ const DashboardNavbar = () => {
           <Button variant="ghost" className="size-8">
             <X />
           </Button>
-          <Button type="submit" className="size-8">
+          <Button type="submit" className="size-8 rose-shadow">
             <SearchIcon />
           </Button>
         </form>

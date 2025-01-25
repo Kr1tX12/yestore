@@ -92,6 +92,9 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  .rose-shadow {
+    @apply !shadow-[0_0_20px_rgba(0,0,0,1)] !shadow-[rgba(244,63,94,0.4)];
+  }
 }
 
 /* width */

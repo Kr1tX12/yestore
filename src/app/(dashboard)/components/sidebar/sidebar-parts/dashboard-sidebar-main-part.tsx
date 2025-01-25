@@ -32,7 +32,7 @@ const DashboardSidebarMainPart = () => {
       {items.map((item) => (
         <Button
           key={item.name}
-          className={cn("w-full transition-all", pathname === item.path ? 'ml-2 w-[calc(100%_-_0.5rem)]' : '')}
+          className={cn("w-full transition-all", pathname === item.path ? 'ml-2 w-[calc(100%_-_0.5rem)] rose-shadow' : '')}
           variant={pathname === item.path ? "default" : "secondary"}
           size="lg"
           onClick={() => router.push(item.path)}

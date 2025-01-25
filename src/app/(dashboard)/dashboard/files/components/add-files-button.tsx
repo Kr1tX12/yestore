@@ -5,6 +5,8 @@ import { UploadIcon } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import FileUploadingPanel from "./file-uploading-panel";
+import { useFiles } from "./providers/files-provider";
+import { useUploadingFiles } from "./providers/uploading-files-provider";
 
 const AddFilesButton = ({
   ownerId,
@@ -15,7 +17,7 @@ const AddFilesButton = ({
   accountId: string;
   className?: string;
 }) => {
-  const [files, setFiles] = useState<File[]>([]);
+  const { files, setFiles } = useUploadingFiles();
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setFiles(acceptedFiles);
@@ -26,7 +28,7 @@ const AddFilesButton = ({
     <>
       <div {...getRootProps()}>
         <input {...getInputProps()} />
-        <Button type="button" className="">
+        <Button type="button" className="rose-shadow">
           <UploadIcon />
           Add files
         </Button>

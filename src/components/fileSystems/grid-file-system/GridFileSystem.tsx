@@ -1,13 +1,13 @@
 "use client";
 
 import { FolderType } from "../types";
-import { useSelected } from "./context/SelectedContext";
+import { useSelected } from "../providers/SelectedContext";
 import { getItemsFromFolder } from "../utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import GridFolder from "./folder/GridFolder";
-import { usePath } from "./context/PathContext";
+import { usePath } from "../providers/PathContext";
 import { useEffect } from "react";
-import { useSingleSelected } from "./context/SingleSelectedContext";
+import { useSingleSelected } from "../providers/SingleSelectedContext";
 
 type FileSystemProps = {
   rootFolder: FolderType;
@@ -27,17 +27,20 @@ const GridFileSystem = ({
 
   useEffect(() => {
     setSingleSelected(null);
-  }, [path])
+  }, [path]);
 
   useEffect(() => {
-    setPath([rootFolder])
-  }, [])
+    setPath([rootFolder]);
+  }, []);
   const folderNow =
     path && path.length > 0 ? path[path.length - 1] : rootFolder;
 
   return (
     <ScrollArea>
-      <ul className={"grid grid-cols-12 mx-8 gap-1"} style={{ height: height - 55 }}>
+      <ul
+        className={"grid grid-cols-12 mx-8 gap-1"}
+        style={{ height: height - 55 }}
+      >
         {hideFirst ? (
           getItemsFromFolder(folderNow, openFolders, "grid")
         ) : (

@@ -3,7 +3,7 @@ import { SelectedProvider } from "./SelectedContext";
 import { SingleSelectedProvider } from "./SingleSelectedContext";
 import { PathProvider } from "./PathContext";
 
-const GridFileSystemProvider = ({ children }: { children: React.ReactNode }) => {
+const FileSystemProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <SelectedProvider>
       <SingleSelectedProvider>
@@ -13,4 +13,4 @@ const GridFileSystemProvider = ({ children }: { children: React.ReactNode }) => 
   );
 };
 
-export default GridFileSystemProvider;
+export default FileSystemProvider;

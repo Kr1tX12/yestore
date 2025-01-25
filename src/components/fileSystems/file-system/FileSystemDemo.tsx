@@ -1,7 +1,7 @@
 "use client";
 
 import FileSystem, { DefaultCardWrapper } from "./FileSystem";
-import FileSystemProvider from "./context/FileSystemProvider";
+import FileSystemProvider from "../providers/FileSystemProvider";
 import { FolderType } from "../types";
 
 const rootFolder: FolderType = {

@@ -14,7 +14,7 @@ import { FileType } from "../../types";
 import { getIconForFile } from "../../utils";
 import FileMenuContent from "../elementMenu/FileMenuContent";
 import { useFileLogic } from "./useFileLogic";
-import { useSingleSelected } from "../context/SingleSelectedContext";
+import { useSingleSelected } from "../../providers/SingleSelectedContext";
 
 /**
  * Компонент для одного файла (показывает имя, иконку, меню и выбор).
@@ -48,7 +48,7 @@ const File = ({ file }: { file: FileType }) => {
   };
 
   const FileIcon = useMemo(() => {
-    return getIconForFile(file);
+    return getIconForFile(file.extension);
   }, [file]);
 
   return (

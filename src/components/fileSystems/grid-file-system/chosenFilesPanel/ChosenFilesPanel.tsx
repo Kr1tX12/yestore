@@ -5,7 +5,7 @@ import gsap from "gsap";
 import { DownloadIcon, Share2Icon, Trash2Icon } from "lucide-react";
 import { memo, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useSelected } from "../context/SelectedContext";
+import { useSelected } from "../../providers/SelectedContext";
 import { FileType, FolderType } from "../../types";
 import { getIconForFile, getIconForFolder, isFolder } from "../../utils";
 

@@ -6,8 +6,8 @@ import { useMemo, useRef } from "react";
 import { FileType } from "../../types";
 import { getIconForFile } from "../../utils";
 import FileMenuContent from "../elementMenu/FileMenuContent";
-import { useSingleSelected } from "../context/SingleSelectedContext";
-import { useSelected } from "../context/SelectedContext";
+import { useSingleSelected } from "../../providers/SingleSelectedContext";
+import { useSelected } from "../../providers/SelectedContext";
 
 /**
  * Компонент для одного файла (показывает имя, иконку, меню и выбор).
@@ -60,7 +60,7 @@ const GridFile = ({ file }: { file: FileType }) => {
   };
 
   const FileIcon = useMemo(() => {
-    return getIconForFile(file);
+    return getIconForFile(file.extension);
   }, [file]);
 
   return (
