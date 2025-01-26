@@ -20,7 +20,7 @@ import { ForwardRefExoticComponent, RefAttributes } from "react";
 import GridFolder from "./grid-file-system/folder/GridFolder";
 import GridFile from "./grid-file-system/file/GridFile";
 import crypto from 'node:crypto';
-import { getFileType, getFileTypesParams } from "@/lib/utils";
+import { Models } from "node-appwrite";
 
 export const isFolder = (
   element: FileType | FolderType | null | undefined
@@ -138,16 +138,18 @@ export const getIconForFolder = (folder: FolderType) => {
     }[mostUsedExtension] ?? FolderIcon
   );
 };
-export const convertToFileType = (file: File): FileType => {
+export const convertToFileType = (file: File & Models.Document): FileType => {
   const lastDotIndex = file.name.lastIndexOf('.');
   const name = lastDotIndex !== -1 ? file.name.substring(0, lastDotIndex) : file.name;
   const extension = lastDotIndex !== -1 ? file.name.substring(lastDotIndex + 1) : '';
+
+  console.log(file)
 
   return {
     id: crypto.randomBytes(16).toString('hex'),
     name: name,
     extension: extension,
     size: file.size,
-    lastModified: new Date(file.lastModified),
+    lastModified: new Date(file.$updatedAt),
   };
 };

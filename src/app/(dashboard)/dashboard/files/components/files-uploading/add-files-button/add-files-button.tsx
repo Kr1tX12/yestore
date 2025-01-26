@@ -10,11 +10,11 @@ const AddFilesButton = ({
   accountId,
   className,
 }: {
-  ownerId: string;
+  ownerId: string | undefined;
   accountId: string;
   className?: string;
 }) => {
-  const { getRootProps, getInputProps, files } = useAddFilesButton();
+  const { getRootProps, getInputProps, files } = useAddFilesButton(ownerId, accountId);
 
   return (
     <>

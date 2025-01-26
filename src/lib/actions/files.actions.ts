@@ -1,12 +1,13 @@
 "use server";
 
-import { ID } from "node-appwrite";
+import { ID, Models, Query } from "node-appwrite";
 import { UplodaFileProps } from "../../../types";
 import { createAdminClient } from "../appwrite";
 import { appwriteConfig } from "../appwrite/config";
 import { InputFile } from "node-appwrite/file";
 import { constructFileUrl, getFileType, parseStringify } from "../utils";
 import { revalidatePath } from "next/cache";
+import { getCurrentUser } from "./user.actions";
 
 const handleError = (error: unknown, message: string) => {
   console.log(error, message);
@@ -42,7 +43,7 @@ export const uploadFile = async ({
       bucketFileId: bucketFile.$id,
     };
 
-    const newFile = databases
+    const newFile = await databases
       .createDocument(
         appwriteConfig.databaseId,
         appwriteConfig.filesCollectionId,
@@ -60,4 +61,33 @@ export const uploadFile = async ({
   } catch (error) {
     handleError(error, "Не удалось загрузить файл");
   }
+};
+
+export const getFiles = async () => {
+  const { databases } = await createAdminClient();
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      throw new Error("Пользователь не найден");
+    }
+    const queries = createQueries(currentUser);
+    const files = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      queries
+    );
+
+    return parseStringify(files);
+  } catch (error) {
+    handleError(error, "Не удалось получить файлы");
+  }
+};
+
+const createQueries = (currentUser: Models.Document) => {
+  return [
+    Query.or([
+      Query.equal("owner", [currentUser.$id]),
+      Query.contains("users", [currentUser.email]),
+    ]),
+  ];
 };

@@ -1,5 +1,3 @@
-
-
 import Footer from "@/components/footer/Footer";
 import Navbar from "@/components/navbar/Navbar";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -39,7 +37,7 @@ export default async function RootLayout({
             <SidebarProvider>
               <DashboardNavbar />
               <DashboardSidebar />
-              <main>
+              <main className="size-full">
                 {children}
                 <Toaster />
               </main>
