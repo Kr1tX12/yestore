@@ -1,5 +1,5 @@
 import { usePath } from "@/components/fileSystems/providers/PathContext";
-import { FolderType } from "@/components/fileSystems/types";
+import { FolderType } from "../../../../../../../types";
 
 export const useFilesBreadcrumb = () => {
   const { path, setPath } = usePath();

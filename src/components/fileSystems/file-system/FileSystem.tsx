@@ -5,11 +5,11 @@ import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
 import { CloudIcon, LayoutListIcon } from "lucide-react";
 import Folder from "./folder/Folder";
-import { FolderType } from "../types";
 import { useSelected } from "../providers/SelectedContext";
-import { getItemsFromFolder } from "../utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import React from "react";
+import { getItemsFromFolder } from "@/lib/utils";
+import { FolderType } from "../../../../types";
 
 type FileSystemProps = {
   rootFolder: FolderType;
@@ -26,8 +26,7 @@ const FileSystem = ({
   height = 300,
   type = "list",
 }: FileSystemProps) => {
-  const { selected, setSelected } = useSelected();
-
+  
   return (
     <ScrollArea>
       <ul

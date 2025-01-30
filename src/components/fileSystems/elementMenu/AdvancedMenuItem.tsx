@@ -7,17 +7,19 @@ const AdvancedMenuItem = ({
   color = "white",
   isContextMenu,
   children,
+  onClick,
 }: {
   icon?: React.ReactNode;
   shortcut?: string;
   color?: string;
   isContextMenu?: boolean;
   children: React.ReactNode;
+  onClick: () => void;
 }) => {
   const MenuItemComponent = isContextMenu ? ContextMenuItem : DropdownMenuItem;
 
   return (
-    <MenuItemComponent className={`flex justify-between items-center gap-12`}>
+    <MenuItemComponent onClick={onClick} className={`flex justify-between items-center gap-12`}>
       <span className={`flex items-center gap-2 text-${color}`}>
         {icon}
         {children}

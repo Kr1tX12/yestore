@@ -1,8 +1,8 @@
-import { FolderType } from "@/components/fileSystems/types";
 import { BreadcrumbItem } from "@/components/ui/breadcrumb";
 import clsx from "clsx";
 import { HomeIcon } from "lucide-react";
 import { MouseEventHandler } from "react";
+import { FolderType } from "../../../../../../../types";
 
 export const BreadcrumbFile = ({
     folder,

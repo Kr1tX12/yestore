@@ -7,6 +7,14 @@ const nextConfig: NextConfig = {
     }
   },
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cloud.appwrite.io',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

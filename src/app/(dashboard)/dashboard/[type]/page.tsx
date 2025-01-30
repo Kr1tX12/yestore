@@ -1,25 +1,27 @@
 import GridFileSystem from "@/components/fileSystems/grid-file-system/GridFileSystem";
 import FileSystemProvider from "@/components/fileSystems/providers/FileSystemProvider";
-import { FolderType } from "@/components/fileSystems/types";
-import { convertToFileType } from "@/components/fileSystems/utils";
-import { Button } from "@/components/ui/button";
-import Sort from "@/components/ui/sort";
 import { getFiles } from "@/lib/actions/files.actions";
-import { Separator } from "@radix-ui/react-separator";
-import { ChevronLeftIcon } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import FilesBreadcrumb from "../files/components/files-breadcrumb/files-breadcrumb";
+import { FilesPageFlex } from "../files/components/files-page/files-page-flex";
+import { FileSystemOptions } from "../files/components/files-page/header/file-system-options";
+import { FilesPageHeader } from "../files/components/files-page/header/files-pages-header";
+import { FolderNowInfo } from "../files/components/files-page/header/folder-now-info";
+import { convertToFileType } from "@/lib/utils";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import FileSystemGrid from "@/components/fileSystems/grid-file-system/components/file-system-grid";
+import { FolderType } from "../../../../../types";
 
 const filesPageTypes = ["images", "videos", "documents", "audio", "others"];
-const Page = async ({ params }: { params: Promise<{ type: string }> }) => {
-  const type = (await params).type;
 
-  if (!filesPageTypes.includes(type)) return notFound();
+// Выносим асинхронную часть в отдельный компонент
+async function FileSystemContent({ type }: { type: string }) {
 
+  console.log("updating page loading files ")
   const files = await getFiles();
-  const convertedFiles = files.documents.map((file: any) => {
-    return convertToFileType(file);
-  });
+  const convertedFiles = files.documents.map(convertToFileType);
+
   const rootFolder: FolderType = {
     name: "Home",
     id: "root",
@@ -27,34 +29,57 @@ const Page = async ({ params }: { params: Promise<{ type: string }> }) => {
   };
 
   return (
-    <section className="my-16">
-      <div className="flex justify-between mx-4">
-        <div>
-          <div className="flex gap-2 items-center text-4xl font-bold capitalize">
-            <Button variant="ghost" size="icon" asChild>
-              <Link href="/dashboard/files">
-                <ChevronLeftIcon />
-              </Link>
-            </Button>
-            {type}
-          </div>
-          <p className="text-sm ml-12 text-zinc-400">
-            Всего: <span className="font-bold text-zinc-50">0GB</span>
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <div>
-            Сортировка: <Sort />
-          </div>
-        </div>
-      </div>
-      <div className="my-4 h-px bg-border" />
-      <div>
-        <FileSystemProvider>
-          <GridFileSystem rootFolder={rootFolder} hideFirst />
-        </FileSystemProvider>
-      </div>
-    </section>
+    <>
+      <FilesPageHeader>
+        <FolderNowInfo />
+        <FileSystemOptions />
+      </FilesPageHeader>
+
+      <div className="bg-border h-px my-3" />
+      <FilesBreadcrumb className="ml-12 mb-6" />
+
+      <GridFileSystem rootFolder={rootFolder} hideFirst />
+    </>
+  );
+}
+
+const Page = async ({ params }: { params: Promise<{type: string}> }) => {
+  const type = (await params).type;
+
+  if (!filesPageTypes.includes(type)) return notFound();
+
+  return (
+    <FileSystemProvider rootFolder={}>
+      <FilesPageFlex>
+        <Suspense
+          fallback={
+            <>
+              <FilesPageHeader>
+                <Skeleton className="w-64 h-9" />
+                <div className="flex gap-2">
+                  <Skeleton className="w-28 h-9" />
+                  <Skeleton className="w-9 h-9" />
+                </div>
+              </FilesPageHeader>
+              <div className="bg-border h-px my-3" />
+              <FileSystemGrid>
+                {Array.from({ length: 23 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="size-36 flex flex-col gap-2 items-center p-2"
+                  >
+                    <Skeleton className="size-24" />
+                    <Skeleton className="h-2 w-20" />
+                  </div>
+                ))}
+              </FileSystemGrid>
+            </>
+          }
+        >
+          <FileSystemContent type={type} />
+        </Suspense>
+      </FilesPageFlex>
+    </FileSystemProvider>
   );
 };
 

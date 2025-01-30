@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { FileType, FolderType } from "../types";
+import { FileType, FolderType } from "../../../../types";
 
 type SelectedContextType = {
   selected: (FileType | FolderType)[] | null;
@@ -18,8 +18,6 @@ export const SelectedProvider = ({ children }: { children: ReactNode }) => {
   const [selected, setSelected] = useState<(FileType | FolderType)[] | null>(
     null
   );
-
-  console.log(selected);
 
   return (
     <SelectedContext.Provider value={{ selected, setSelected }}>

@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { getBigFilesErrorToastParams } from "./big-files-toast-data";
 import { uploadFile } from "@/lib/actions/files.actions";
 import { usePathname } from "next/navigation";
+import { UploadProgress } from "node-appwrite";
 
 export const useAddFilesButton = (ownerId: string | undefined, accountId: string) => {
   const path = usePathname();
@@ -31,7 +32,7 @@ export const useAddFilesButton = (ownerId: string | undefined, accountId: string
           setFiles((prev) => prev.filter((f) => f.name !== file.name));
           bigFiles.push(file);
         } else {
-          return uploadFile({ file, ownerId, accountId, path }).then(
+          return uploadFile({ file, ownerId, accountId, path, onProgress }).then(
             (uploadedFile) => {
               if (uploadedFile) {
                 setFiles((prev) => prev.filter((f) => f.name !== file.name));
@@ -48,6 +49,10 @@ export const useAddFilesButton = (ownerId: string | undefined, accountId: string
     },
     [ownerId, accountId, path]
   );
+
+  const onProgress = (progress: UploadProgress) => {
+    console.log(progress);
+  }
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return { getRootProps, getInputProps, isDragActive, files };

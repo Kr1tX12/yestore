@@ -9,7 +9,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import React from "react";
 import FilesTable from "./utils/files-table";
-import { FileType } from "@/components/fileSystems/types";
+import { FileType } from "../../../../../types";
 
 const tableData: Array<FileType> = [
   {

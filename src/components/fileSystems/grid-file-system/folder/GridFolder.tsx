@@ -1,16 +1,15 @@
 "use client";
 
-import { FolderType } from "../../types";
-import { Button } from "@/components/ui/button";
 import { useMemo } from "react";
-import { getIconForFolder } from "../../utils";
 import { usePath } from "../../providers/PathContext";
 import { useSelected } from "../../providers/SelectedContext";
 import { useSingleSelected } from "../../providers/SingleSelectedContext";
 import clsx from "clsx";
+import { getIconForFolder } from "@/lib/utils";
+import { FolderType } from "../../../../../types";
 
 const GridFolder = ({ folder }: { folder: FolderType }) => {
-  const { path, setPath } = usePath();
+  const { setPath } = usePath();
   const { selected, setSelected } = useSelected();
   const { singleSelected, setSingleSelected } = useSingleSelected();
   const isSelectionEnabled = selected !== null;

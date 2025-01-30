@@ -9,11 +9,12 @@ import Logo from "@/components/NavbarLogo";
 import DashboardSidebarMainPart from "./sidebar-parts/dashboard-sidebar-main-part";
 import DashboardSidebarFooter from "./sidebar-parts/footer/dashboard-sidebar-footer";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 
-const DashboardSidebar = () => {
+const DashboardSidebar = ({ className }: { className?: string }) => {
   return (
-    <Sidebar className="z-[120]">
+    <Sidebar className={cn("z-[120]", className)}>
       <SidebarHeader>
         <Button variant="ghost">
           <Logo />

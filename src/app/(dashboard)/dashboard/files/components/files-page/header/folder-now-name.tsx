@@ -1,5 +1,5 @@
 import { usePath } from "@/components/fileSystems/providers/PathContext";
-import { getIconForFolder } from "@/components/fileSystems/utils";
+import { getIconForFolder } from "@/lib/utils";
 import { FolderIcon } from "lucide-react";
 
 export const FolderNowName = () => {

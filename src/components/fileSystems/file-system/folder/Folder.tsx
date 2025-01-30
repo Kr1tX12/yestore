@@ -5,12 +5,12 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { FolderType } from "../../types";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
-import { getIconForFolder, getItemsFromFolder } from "../../utils";
 import clsx from "clsx";
+import { getIconForFolder, getItemsFromFolder } from "@/lib/utils";
+import { FolderType } from "../../../../../types";
 
 const Folder = ({ folder, autoOpen = false }: { folder: FolderType, autoOpen?: boolean }) => {
   const [open, setOpen] = useState<boolean>(false);

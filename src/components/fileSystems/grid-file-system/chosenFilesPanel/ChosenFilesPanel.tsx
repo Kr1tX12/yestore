@@ -6,13 +6,26 @@ import { DownloadIcon, Share2Icon, Trash2Icon } from "lucide-react";
 import { memo, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useSelected } from "../../providers/SelectedContext";
-import { FileType, FolderType } from "../../types";
-import { getIconForFile, getIconForFolder, isFolder } from "../../utils";
+import {
+  convertFileSize,
+  formatDateTime,
+  getFileExtension,
+  getFileType,
+  getIconForFolder,
+  getSizeOfFolder,
+  isFolder
+} from "@/lib/utils";
+import Thumbnail from "@/components/ui/thumbnail";
+import { useSingleSelected } from "../../providers/SingleSelectedContext";
+import { FileType, FolderType } from "../../../../../types";
 
 const ChosenFilesPanel = () => {
   const [mounted, setMounted] = useState(false);
-  const { selected, setSelected } = useSelected();
+  const { selected } = useSelected();
+  const { singleSelected } = useSingleSelected();
 
+  const items = selected && selected.length > 0 ? selected : singleSelected === null ? null : [singleSelected]
+  
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -20,8 +33,7 @@ const ChosenFilesPanel = () => {
   }, []);
 
   useEffect(() => {
-    console.log(selected);
-    if (selected && selected.length > 0) {
+    if (items && items.length > 0) {
       gsap.to(panelRef.current, {
         translateY: 0,
         duration: 0.2,
@@ -32,24 +44,26 @@ const ChosenFilesPanel = () => {
         duration: 0.2,
       });
     }
-  }, [selected]);
+  }, [selected, singleSelected]);
 
   if (!mounted) {
     return null;
   }
 
+  const totalSize = items?.reduce((acc, item) => acc + (isFolder(item) ? getSizeOfFolder(item) : item.size), 0);
+
   return createPortal(
     <div
       ref={panelRef}
-      className="fixed bottom-0 right-0 left-0 h-20 bg-zinc-950 mx-1 rounded-t-xl z-20 border border-zinc-900 flex justify-evenly translate-y-20"
+      className="fixed bottom-0 right-0 left-0 h-20 bg-zinc-950 mx-1 rounded-t-xl z-[200] border border-zinc-900 flex justify-evenly translate-y-20"
     >
       <div className="max-w-6xl h-full flex gap-1 flex-col justify-center">
         <span className="text-xs text-zinc-400">
-          Выбрано элементов: {selected?.length}
+          Выбрано элементов: {items?.length}
         </span>
         <div className="flex gap-3">
-          {selected && selected?.length > 0 && selected?.length < 5 ? (
-            selected.map((item) => <PanelItem item={item} />)
+          {items && items.length > 0 && items.length < 5 ? (
+            items.map((item) => <PanelItem key={item.id} item={item} />)
           ) : (
             <div>Много файлов</div>
           )}
@@ -57,16 +71,16 @@ const ChosenFilesPanel = () => {
       </div>
 
       <div className="flex gap-2 items-center">
-        <Button size="sm">
+        <Button size="sm" variant="secondary">
           <DownloadIcon />
           <div className="flex flex-col">
             <span className="leading-[14px]">Скачать всё</span>
-            <span className="text-[8px] text-zinc-700 leading-[8px]">
-              10 МБ
+            <span className="text-[8px] text-zinc-200 leading-[8px]">
+              {convertFileSize(totalSize ?? 0, 2)}
             </span>
           </div>
         </Button>
-        <Button size="sm">
+        <Button variant="secondary" size="sm">
           <Share2Icon />
           Поделиться
         </Button>
@@ -88,18 +102,24 @@ const PanelItem = ({ item }: { item: FileType | FolderType }) => {
   );
   return element;
 };
+
 const File = memo(({ file }: { file: FileType }) => {
-  const FileIcon = getIconForFile(file);
-  console.log("fileRender");
+  console.log(file);
   return (
-    <div className="flex items-center">
-      <FileIcon className="size-8" strokeWidth="1.5" />
+    <div className="flex gap-1 items-center">
+      <Thumbnail
+        type={getFileType(file.name)}
+        extension={getFileExtension(file.name)}
+        url={file.url}
+        size={200}
+        className="size-8 rounded-sm"
+      />
       <div className="flex flex-col">
         <span className="text-sm font-bold">
-          {file.name}.{file.extension}
+          {file.name}
         </span>
         <span className="text-[9px] text-zinc-400">
-          Изменён <span className="text-zinc-50">10.01.2023</span>
+          Изменён <span className="text-zinc-50">{formatDateTime(file.lastModified)}</span>
         </span>
       </div>
     </div>

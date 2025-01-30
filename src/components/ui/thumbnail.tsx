@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { getIconForFile } from "../fileSystems/utils";
-import { cn } from "@/lib/utils";
+import { cn, getIconForFile } from "@/lib/utils";
 
 const Thumbnail = ({
   type,
@@ -20,7 +19,6 @@ const Thumbnail = ({
   className?: string;
   size?: number;
 }) => {
-  console.log({ type, extension, url });
   const isImage = type.includes("image") && extension !== "svg";
   if (isImage) {
     return (

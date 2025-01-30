@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { FileType, FolderType } from "../types";
+import { FileType, FolderType } from "../../../../types";
 
 type SingleSelectedContextType = {
   singleSelected: FileType | FolderType | null;
@@ -23,7 +23,6 @@ export const SingleSelectedProvider = ({
     FileType | FolderType | null
   >(null);
 
-  console.log(singleSelected);
 
   return (
     <SingleSelectedContext.Provider

@@ -1,26 +1,11 @@
 "use client";
 
-import { usePath } from "@/components/fileSystems/providers/PathContext";
-import { FolderType } from "@/components/fileSystems/types";
 import {
   Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-  BreadcrumbEllipsis,
-  BreadcrumbPage,
+  BreadcrumbList, BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import clsx from "clsx";
-import { HomeIcon } from "lucide-react";
-import React, { MouseEventHandler } from "react";
+import React from "react";
 import { BreadcrumbFile } from "./breadcrumb-file";
 import { useFilesBreadcrumb } from "./use-files-breadcrumb";
 

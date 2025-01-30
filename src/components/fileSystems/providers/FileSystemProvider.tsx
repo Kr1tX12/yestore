@@ -2,12 +2,16 @@ import React from "react";
 import { SelectedProvider } from "./SelectedContext";
 import { SingleSelectedProvider } from "./SingleSelectedContext";
 import { PathProvider } from "./PathContext";
+import { FilesProvider } from "./files-provider";
+import { FolderType } from "../../../../types";
 
-const FileSystemProvider = ({ children }: { children: React.ReactNode }) => {
+const FileSystemProvider = ({ children, rootFolder }: { children: React.ReactNode, rootFolder: FolderType }) => {
   return (
     <SelectedProvider>
       <SingleSelectedProvider>
-        <PathProvider>{children}</PathProvider>
+        <FilesProvider rootFolder={rootFolder} >
+          <PathProvider>{children}</PathProvider>
+        </FilesProvider>
       </SingleSelectedProvider>
     </SelectedProvider>
   );

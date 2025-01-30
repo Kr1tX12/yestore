@@ -10,11 +10,11 @@ import { EllipsisVertical } from "lucide-react";
 import clsx from "clsx";
 import { useMemo, useRef } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { FileType } from "../../types";
-import { getIconForFile } from "../../utils";
-import FileMenuContent from "../elementMenu/FileMenuContent";
 import { useFileLogic } from "./useFileLogic";
 import { useSingleSelected } from "../../providers/SingleSelectedContext";
+import { getFileExtension, getIconForFile } from "@/lib/utils";
+import FileMenuContent from "../../elementMenu/FileMenuContent";
+import { FileType } from "../../../../../types";
 
 /**
  * Компонент для одного файла (показывает имя, иконку, меню и выбор).
@@ -46,9 +46,9 @@ const File = ({ file }: { file: FileType }) => {
       setSingleSelected(value ? file : null);
     }
   };
-
+  const extension = getFileExtension(file.name)
   const FileIcon = useMemo(() => {
-    return getIconForFile(file.extension);
+    return getIconForFile(extension ?? "");
   }, [file]);
 
   return (
@@ -71,7 +71,7 @@ const File = ({ file }: { file: FileType }) => {
             >
               <FileIcon />
               <span className="flex-1 text-left">
-                {file.name}.{file.extension}
+                {file.name}.{extension}
               </span>
             </Button>
           </ContextMenuTrigger>
@@ -87,7 +87,7 @@ const File = ({ file }: { file: FileType }) => {
               <EllipsisVertical />
             </Button>
           </DropdownMenuTrigger>
-          <FileMenuContent isContextMenu={false} file={file} />
+          <FileMenuContent  isContextMenu={false} file={file} />
         </DropdownMenu>
       </div>
     </li>

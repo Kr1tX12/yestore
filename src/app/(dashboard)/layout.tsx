@@ -34,17 +34,18 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <UserProvider>
+            <DashboardNavbar />
             <SidebarProvider>
-              <DashboardNavbar />
               <DashboardSidebar />
-              <main className="size-full">
+              <main className="w-full">
                 {children}
                 <Toaster />
               </main>
+
             </SidebarProvider>
           </UserProvider>
-          <Footer />
         </ThemeProvider>
+        <Footer />
       </body>
     </html>
   );

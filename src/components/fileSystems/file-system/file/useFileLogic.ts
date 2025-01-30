@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FileType } from "../../types";
 import { useSelected } from "../../providers/SelectedContext";
 import gsap from "gsap";
+import { FileType } from "../../../../../types";
 
 /**
  * Хук для управления состоянием выбора (чекбокса) отдельного файла.

@@ -5,9 +5,14 @@ import { UplodaFileProps } from "../../../types";
 import { createAdminClient } from "../appwrite";
 import { appwriteConfig } from "../appwrite/config";
 import { InputFile } from "node-appwrite/file";
-import { constructFileUrl, getFileType, parseStringify } from "../utils";
-import { revalidatePath } from "next/cache";
+import {
+  constructFileUrl,
+  getFileExtension,
+  getFileType,
+  parseStringify,
+} from "../utils";
 import { getCurrentUser } from "./user.actions";
+import { revalidatePath } from "next/cache";
 
 const handleError = (error: unknown, message: string) => {
   console.log(error, message);
@@ -19,6 +24,7 @@ export const uploadFile = async ({
   ownerId,
   accountId,
   path,
+  onProgress,
 }: UplodaFileProps) => {
   const { storage, databases } = await createAdminClient();
 
@@ -28,12 +34,16 @@ export const uploadFile = async ({
     const bucketFile = await storage.createFile(
       appwriteConfig.bucketId,
       ID.unique(),
-      file
+      inputFile,
+      undefined,
+      (progress) => {
+        onProgress(progress);
+      }
     );
 
     const fileDocument = {
-      type: getFileType(bucketFile.name).type,
-      extension: getFileType(bucketFile.name).extension,
+      type: getFileType(bucketFile.name),
+      extension: getFileExtension(bucketFile.name),
       name: bucketFile.name,
       url: constructFileUrl(bucketFile.$id),
       size: bucketFile.sizeOriginal,
@@ -55,6 +65,7 @@ export const uploadFile = async ({
         handleError(error, "Не удалось загрузить файл");
       });
 
+      
     revalidatePath(path);
 
     return parseStringify(newFile);
@@ -89,5 +100,89 @@ const createQueries = (currentUser: Models.Document) => {
       Query.equal("owner", [currentUser.$id]),
       Query.contains("users", [currentUser.email]),
     ]),
+    Query.limit(100),
   ];
+};
+
+export const renameFile = async ({
+  fileId,
+  name,
+  extension,
+  path,
+}: {
+  fileId: string;
+  name: string;
+  extension: string;
+  path: string;
+}) => {
+  const { databases } = await createAdminClient();
+  try {
+    const newName = `${name}.${extension}`;
+    const updatedFile = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      fileId,
+      { name: newName }
+    );
+
+    revalidatePath(path);
+
+    return parseStringify(updatedFile);
+  } catch (e) {
+    handleError(e, "Не удалось переименовать файл");
+  }
+};
+
+export const updateFileUsers = async ({
+  fileId,
+  emails,
+  path,
+}: {
+  fileId: string;
+  emails: string[];
+  path: string;
+}) => {
+  const { databases } = await createAdminClient();
+  try {
+    const updatedFile = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      fileId,
+      { users: emails }
+    );
+
+    revalidatePath(path);
+
+    return parseStringify(updatedFile);
+  } catch (e) {
+    handleError(e, "Не удалось переименовать файл");
+  }
+};
+
+export const deleteFile = async ({
+  fileId,
+  bucketFileId,
+  path,
+}: {
+  fileId: string;
+  bucketFileId: string;
+  path: string;
+}) => {
+  const { databases, storage } = await createAdminClient();
+
+  try {
+    const deletedFile = await databases.deleteDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      fileId
+    );
+    if (deletedFile) {
+      storage.deleteFile(appwriteConfig.bucketId, bucketFileId);
+    }
+    revalidatePath(path);
+
+    return parseStringify({ status: "success" });
+  } catch (error) {
+    handleError(error, "Не удалось удалить файл");
+  }
 };

@@ -5,9 +5,9 @@ import gsap from "gsap";
 import { DownloadIcon, Share2Icon, Trash2Icon } from "lucide-react";
 import { memo, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useSelected } from "../context/SelectedContext";
-import { FileType, FolderType } from "../types";
-import { getIconForFile, getIconForFolder, isFolder } from "../utils";
+import { isFolder, getIconForFile, getIconForFolder } from "@/lib/utils";
+import { useSelected } from "../../providers/SelectedContext";
+import { FileType, FolderType } from "../../../../../types";
 
 const ChosenFilesPanel = () => {
   const [mounted, setMounted] = useState(false);
@@ -47,7 +47,7 @@ const ChosenFilesPanel = () => {
         <span className="text-xs text-zinc-400">Выбрано элементов: {selected?.length}</span>
         <div className="flex gap-3">
           {selected && selected?.length > 0 && selected?.length < 5 ? ( 
-            selected.map((item) => (
+            selected.map((item: FileType | FolderType) => (
               <PanelItem item={item} />
             ))
           ) : (
@@ -85,13 +85,13 @@ const PanelItem = ({ item }: { item: FileType | FolderType}) => {
   return element;
 }
 const File = memo(({ file }: { file: FileType }) => {
-  const FileIcon = getIconForFile(file);
+  const FileIcon = getIconForFile(file.name);
   console.log('fileRender');
   return (
     <div className="flex items-center">
       <FileIcon className="size-8" strokeWidth="1.5" />
       <div className="flex flex-col">
-        <span className="text-sm font-bold">{file.name}.{file.extension}</span>
+        <span className="text-sm font-bold">{file.name}</span>
         <span className="text-[9px] text-zinc-400">
           Изменён <span className="text-zinc-50">10.01.2023</span>
         </span>
