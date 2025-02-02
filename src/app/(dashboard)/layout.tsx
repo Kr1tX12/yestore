@@ -11,6 +11,9 @@ import { UserProvider } from "@/components/auth/user-provider";
 import DashboardNavbar from "./components/navbar/dashboard-navbar";
 import { Toaster } from "@/components/ui/toaster";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "My Page Title",
 };
@@ -44,8 +47,9 @@ export default async function RootLayout({
 
             </SidebarProvider>
           </UserProvider>
+
+          <Footer />
         </ThemeProvider>
-        <Footer />
       </body>
     </html>
   );

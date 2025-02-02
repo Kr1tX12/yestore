@@ -13,19 +13,28 @@ import {
   getFileType,
   getIconForFolder,
   getSizeOfFolder,
-  isFolder
+  isFolder,
 } from "@/lib/utils";
 import Thumbnail from "@/components/ui/thumbnail";
 import { useSingleSelected } from "../../providers/SingleSelectedContext";
 import { FileType, FolderType } from "../../../../../types";
+import FileDeleteDialog from "../../elementMenu/FileDeleteDialog";
+import FileSharingDialog from "../../elementMenu/FileSharingDialog";
 
 const ChosenFilesPanel = () => {
   const [mounted, setMounted] = useState(false);
   const { selected } = useSelected();
   const { singleSelected } = useSingleSelected();
+  const [panelNow, setPanelNow] = useState<"delete" | "share" | "none">("none");
+  const [isPanelOpen, setPanelOpen] = useState<boolean>(false);
 
-  const items = selected && selected.length > 0 ? selected : singleSelected === null ? null : [singleSelected]
-  
+  const items =
+    selected && selected.length > 0
+      ? selected
+      : singleSelected === null
+        ? null
+        : [singleSelected];
+
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -50,46 +59,88 @@ const ChosenFilesPanel = () => {
     return null;
   }
 
-  const totalSize = items?.reduce((acc, item) => acc + (isFolder(item) ? getSizeOfFolder(item) : item.size), 0);
+  const totalSize = items?.reduce(
+    (acc, item) => acc + (isFolder(item) ? getSizeOfFolder(item) : item.size),
+    0
+  );
 
   return createPortal(
-    <div
-      ref={panelRef}
-      className="fixed bottom-0 right-0 left-0 h-20 bg-zinc-950 mx-1 rounded-t-xl z-[200] border border-zinc-900 flex justify-evenly translate-y-20"
-    >
-      <div className="max-w-6xl h-full flex gap-1 flex-col justify-center">
-        <span className="text-xs text-zinc-400">
-          Выбрано элементов: {items?.length}
-        </span>
-        <div className="flex gap-3">
-          {items && items.length > 0 && items.length < 5 ? (
-            items.map((item) => <PanelItem key={item.id} item={item} />)
-          ) : (
-            <div>Много файлов</div>
+    <>
+      <div
+        ref={panelRef}
+        className="fixed bottom-0 right-0 left-0 h-20 bg-zinc-950 mx-1 rounded-t-xl z-[200] border border-zinc-900 flex justify-evenly translate-y-20"
+      >
+        <div className="max-w-6xl h-full flex gap-1 flex-col justify-center">
+          <span className="text-xs text-zinc-400">
+            Выбрано элементов: {items?.length}
+          </span>
+          <div className="flex gap-3">
+            {items && items.length > 0 && items.length < 5 ? (
+              items.map((item) => <PanelItem key={item.id} item={item} />)
+            ) : (
+              <div>Много файлов</div>
+            )}
+          </div>
+        </div>
+
+        <div className="flex gap-2 items-center">
+          <Button size="sm" variant="secondary">
+            <DownloadIcon />
+            <div className="flex flex-col">
+              <span className="leading-[14px]">Скачать всё</span>
+              <span className="text-[8px] text-zinc-200 leading-[8px]">
+                {convertFileSize(totalSize ?? 0, 2)}
+              </span>
+            </div>
+          </Button>
+          {items && items.length <= 1 && (
+            <Button
+              onClick={() => {
+                if (items && items.length > 1) return;
+                setPanelNow("share");
+                setPanelOpen(true);
+              }}
+              variant="secondary"
+              size="sm"
+            >
+              <Share2Icon />
+              Поделиться
+            </Button>
           )}
+
+          <Button
+            onClick={() => {
+              setPanelNow("delete");
+              setPanelOpen(true);
+            }}
+            size="sm"
+            variant="destructive"
+          >
+            <Trash2Icon />
+            Удалить
+          </Button>
         </div>
       </div>
-
-      <div className="flex gap-2 items-center">
-        <Button size="sm" variant="secondary">
-          <DownloadIcon />
-          <div className="flex flex-col">
-            <span className="leading-[14px]">Скачать всё</span>
-            <span className="text-[8px] text-zinc-200 leading-[8px]">
-              {convertFileSize(totalSize ?? 0, 2)}
-            </span>
-          </div>
-        </Button>
-        <Button variant="secondary" size="sm">
-          <Share2Icon />
-          Поделиться
-        </Button>
-        <Button size="sm" variant="destructive">
-          <Trash2Icon />
-          Удалить
-        </Button>
-      </div>
-    </div>,
+      {
+        {
+          delete: (
+            <FileDeleteDialog
+              isOpen={isPanelOpen}
+              setOpen={setPanelOpen}
+              file={items as FileType[]}
+            />
+          ),
+          share: items && (
+            <FileSharingDialog
+              isOpen={isPanelOpen}
+              setOpen={setPanelOpen}
+              file={items[0] as FileType}
+            />
+          ),
+          none: null,
+        }[panelNow]
+      }
+    </>,
     document.body
   );
 };
@@ -115,11 +166,12 @@ const File = memo(({ file }: { file: FileType }) => {
         className="size-8 rounded-sm"
       />
       <div className="flex flex-col">
-        <span className="text-sm font-bold">
-          {file.name}
-        </span>
+        <span className="text-sm font-bold">{file.name}</span>
         <span className="text-[9px] text-zinc-400">
-          Изменён <span className="text-zinc-50">{formatDateTime(file.lastModified)}</span>
+          Изменён{" "}
+          <span className="text-zinc-50">
+            {formatDateTime(file.lastModified)}
+          </span>
         </span>
       </div>
     </div>

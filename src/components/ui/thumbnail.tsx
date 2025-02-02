@@ -22,7 +22,7 @@ const Thumbnail = ({
   const isImage = type.includes("image") && extension !== "svg";
   if (isImage) {
     return (
-      <figure>
+      <figure className="select-none">
         <Image className={cn("object-cover", imageClassName, className)} src={url} alt={type} width={size} height={size} />
       </figure>
     );

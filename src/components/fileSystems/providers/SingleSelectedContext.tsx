@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useMemo,
+} from "react";
 import { FileType, FolderType } from "../../../../types";
 
 type SingleSelectedContextType = {
@@ -23,10 +29,17 @@ export const SingleSelectedProvider = ({
     FileType | FolderType | null
   >(null);
 
+  const value = useMemo(
+    () => ({
+      singleSelected,
+      setSingleSelected,
+    }),
+    [singleSelected]
+  );
 
   return (
     <SingleSelectedContext.Provider
-      value={{ singleSelected, setSingleSelected }}
+      value={value}
     >
       {children}
     </SingleSelectedContext.Provider>

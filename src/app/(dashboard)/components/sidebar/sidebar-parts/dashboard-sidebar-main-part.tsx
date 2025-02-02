@@ -34,17 +34,17 @@ const items = [
       {
         name: "Фото",
         icon: ImageIcon,
-        href: "/dashboard/images",
+        href: "/dashboard/image",
       },
       {
         name: "Видео",
         icon: VideoIcon,
-        href: "/dashboard/videos",
+        href: "/dashboard/video",
       },
       {
         name: "Документы",
         icon: FileText,
-        href: "/dashboard/documents",
+        href: "/dashboard/document",
       },
       {
         name: "Аудио",
@@ -54,7 +54,7 @@ const items = [
       {
         name: "Остальное",
         icon: PenIcon,
-        href: "/dashboard/others",
+        href: "/dashboard/other",
       },
     ],
   },

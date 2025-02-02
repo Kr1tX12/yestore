@@ -23,3 +23,6 @@ export type FolderType = {
   name: string;
   contents: (FileType | FolderType)[];
 };
+
+
+export type FileFilterType = "image" | "video" | "document" | "audio" | "others";

@@ -6,9 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Dispatch, SetStateAction, useState } from "react";
-import { FileType } from "../../../../types";
+import { FileType, FolderType } from "../../../../types";
 import { Button } from "@/components/ui/button";
 import { deleteFile } from "@/lib/actions/files.actions";
 import { usePathname } from "next/navigation";
@@ -21,25 +20,37 @@ const FileDeleteDialog = ({
 }: {
   isOpen: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  file: FileType;
+  file: FileType | Array<FileType>;
 }) => {
   const [isLoading, setLoading] = useState(false);
 
   const pathname = usePathname();
   const close = () => {
     setOpen(false);
-  }
-
+  };
+  let deletedFile: { status: string };
   const confirmDeletion = async () => {
     setLoading(true);
-    
-    const deletedFile = await deleteFile({
-      fileId: file.id,
-      bucketFileId: file.bucketFileId,
-      path: pathname,
-    });
+    if (file instanceof Array) {
+      const promises = file.map((f) => {
+        return deleteFile({
+          fileId: f.id,
+          bucketFileId: f.bucketFileId,
+          path: pathname,
+        });
+      });
 
-    if (deletedFile.status === 'success') {
+      await Promise.all(promises);
+      deletedFile = { status: "success" };
+    } else {
+      deletedFile = await deleteFile({
+        fileId: file.id,
+        bucketFileId: file.bucketFileId,
+        path: pathname,
+      });
+    }
+
+    if (deletedFile.status === "success") {
       close();
     }
 

@@ -24,7 +24,6 @@ export const uploadFile = async ({
   ownerId,
   accountId,
   path,
-  onProgress,
 }: UplodaFileProps) => {
   const { storage, databases } = await createAdminClient();
 
@@ -34,11 +33,7 @@ export const uploadFile = async ({
     const bucketFile = await storage.createFile(
       appwriteConfig.bucketId,
       ID.unique(),
-      inputFile,
-      undefined,
-      (progress) => {
-        onProgress(progress);
-      }
+      inputFile
     );
 
     const fileDocument = {
@@ -65,7 +60,6 @@ export const uploadFile = async ({
         handleError(error, "Не удалось загрузить файл");
       });
 
-      
     revalidatePath(path);
 
     return parseStringify(newFile);
@@ -74,14 +68,24 @@ export const uploadFile = async ({
   }
 };
 
-export const getFiles = async () => {
+export const getFiles = async ({
+  types = [],
+  searchText,
+  sort = "$createdAt-desc",
+  limit = 25,
+}: {
+  types?: string[];
+  searchText?: string;
+  sort?: string;
+  limit?: number;
+}) => {
   const { databases } = await createAdminClient();
   try {
     const currentUser = await getCurrentUser();
     if (!currentUser) {
       throw new Error("Пользователь не найден");
     }
-    const queries = createQueries(currentUser);
+    const queries = createQueries(currentUser, types, searchText, sort, limit);
     const files = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.filesCollectionId,
@@ -94,14 +98,29 @@ export const getFiles = async () => {
   }
 };
 
-const createQueries = (currentUser: Models.Document) => {
-  return [
+const createQueries = (
+  currentUser: Models.Document,
+  types?: string[],
+  searchText?: string,
+  sort?: string,
+  limit?: number
+) => {
+  const queries = [
     Query.or([
       Query.equal("owner", [currentUser.$id]),
       Query.contains("users", [currentUser.email]),
     ]),
-    Query.limit(100),
   ];
+  if (types && types.length > 0 && !types.includes("files"))
+    queries.push(Query.equal("type", types));
+
+  if (searchText) queries.push(Query.contains("name", searchText));
+  if (limit) queries.push(Query.limit(limit));
+  if (sort) {
+    const [sortBy, orderBy] = sort.split("-");
+    queries.push(orderBy === 'desc' ? Query.orderDesc(sortBy) : Query.orderAsc(sortBy));
+  }
+  return queries;
 };
 
 export const renameFile = async ({

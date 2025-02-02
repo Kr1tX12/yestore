@@ -8,8 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import React from "react";
-import { FileType } from "@/components/fileSystems/types";
-
 import { CircleAlert, TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 
@@ -19,6 +17,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { FileType } from "../../../../../types";
 
 const chartData: Array<FileType> = [
   {
