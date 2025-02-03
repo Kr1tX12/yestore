@@ -12,10 +12,6 @@ export type NavbarItemForm =
 export const navbarItems: NavbarItem[] = [
   {
     label: "Dashboard",
-    href: "/dashboard",
-  },
-  {
-    label: "Pricing",
-    href: "/pricing",
+    href: "/dashboard/files",
   },
 ];

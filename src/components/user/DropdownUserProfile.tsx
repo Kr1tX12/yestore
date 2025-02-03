@@ -14,10 +14,16 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { DollarSignIcon, LayoutDashboardIcon, LogOutIcon, SettingsIcon } from "lucide-react";
+import {
+  DollarSignIcon,
+  LayoutDashboardIcon,
+  LogOutIcon,
+  SettingsIcon,
+} from "lucide-react";
 import UserProfile from "./UserProfile";
 import { useUser } from "../auth/user-provider";
 import { signOutUser } from "@/lib/actions/user.actions";
+import Link from "next/link";
 
 const DropdownUserProfile = () => {
   const user = useUser();
@@ -39,23 +45,20 @@ const DropdownUserProfile = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <LayoutDashboardIcon />
-            Dashboard
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <DollarSignIcon />
-            Billing
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <SettingsIcon />
-            Settings
+          <DropdownMenuItem asChild>
+            <Link href="/dashboard/files">
+              <LayoutDashboardIcon />
+              Dashboard
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="text-rose-400 hover:!text-rose-300" onClick={signOutUser}>
-            <LogOutIcon  />
+          <DropdownMenuItem
+            className="text-rose-400 hover:!text-rose-300"
+            onClick={signOutUser}
+          >
+            <LogOutIcon />
             Выйти
           </DropdownMenuItem>
         </DropdownMenuGroup>

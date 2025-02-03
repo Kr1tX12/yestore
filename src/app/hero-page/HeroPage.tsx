@@ -65,7 +65,6 @@ const HeroPage = () => {
           <HeroCanvas />
         </div>
       </section>
-      <FileSystemPart />
     </div>
   );
 };
