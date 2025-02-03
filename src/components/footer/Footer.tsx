@@ -48,7 +48,7 @@ const socialMediaItems = [
 ];
 const Footer = ({ className }: { className?: string }) => {
   return (
-    <div className={cn("bg-card z-[500000] border border-border w-full flex items-center justify-center rounded-t-xl", className)}>
+    <div className={cn("bg-card  border-t border-border w-full flex items-center justify-center", className)}>
       <div className="flex flex-col gap-4 p-4 w-full max-w-5xl">
         <div className="col-span-2 flex flex-col gap-2">
           <h2 className="font-bold text-xl ml-2">Сайт сделан Krit'ом</h2>

@@ -105,7 +105,7 @@ const Search = () => {
 
   const handleClickItem = (file: Models.Document) => {
     setResults([]);
-    router.push(`/dashboard/${getFileType(file.name)}`);
+    router.push(`/dashboard/${getFileType(file.name)}?query=${file.name}`);
   };
 
   return (

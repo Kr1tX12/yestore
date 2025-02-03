@@ -139,3 +139,19 @@ export const signInUser = async ({ email }: { email: string }) => {
     handleError(e, "Не удалось войти");
   }
 };
+
+export const getUserById = async ({ id }: { id: string }) => {
+  const { databases } = await createAdminClient();
+
+  try {
+    const result = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      [Query.equal("$id", id)]
+    );
+    if (result.total <= 0) return null;
+    return parseStringify(result.documents[0]);
+  } catch (e) {
+    handleError(e, "Не удалось получить пользователя по ID");
+  }
+};

@@ -15,6 +15,15 @@ import { Label } from "@/components/ui/label";
 import { FileType } from "../../../../types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { updateFileUsers } from "@/lib/actions/files.actions";
+import Thumbnail from "@/components/ui/thumbnail";
+import {
+  convertFileSize,
+  formatDateTime,
+  getFileExtension,
+  getFileType,
+} from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
+import { title } from "process";
 
 const FileSharingDialog = ({
   isOpen,
@@ -29,6 +38,7 @@ const FileSharingDialog = ({
   const pathname = usePathname();
   const [email, setEmail] = useState("");
   const [emails, setEmails] = useState<string[]>(file.users);
+  const toast = useToast();
 
   const close = () => {
     setEmail("");
@@ -36,6 +46,13 @@ const FileSharingDialog = ({
   };
 
   const addNewEmail = () => {
+    if (email.trim() === "") {
+      toast.toast({
+        title: "Введите электронную почту",
+        variant: "destructive"
+      });
+      return;
+    }
     setEmails((prev) => [...prev, email]);
     setEmail("");
   };
@@ -60,7 +77,22 @@ const FileSharingDialog = ({
     <Dialog onOpenChange={(value) => setOpen(value)} open={isOpen}>
       <DialogContent className="bg-card">
         <DialogHeader>
-          <DialogTitle>Поделись файлом</DialogTitle>
+          <DialogTitle className="flex items-center gap-2">
+            <Thumbnail
+              type={getFileType(file.name)}
+              extension={getFileExtension(file.name)}
+              url={file.url}
+              size={200}
+              className="size-10 rounded-sm"
+            />
+            <div className="flex flex-col gap-1">
+              {file.name}
+              <div className="flex gap-4 text-muted-foreground text-xs font-normal">
+                <p>{formatDateTime(file.lastModified)}</p>
+                <p>{convertFileSize(file.size)}</p>
+              </div>
+            </div>
+          </DialogTitle>
         </DialogHeader>
         <div className="flex items-end gap-2">
           <div className="flex-1 grid w-full items-center gap-1.5">

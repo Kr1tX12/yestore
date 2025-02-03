@@ -21,11 +21,6 @@ const items = [
     path: "/dashboard/stats",
   },
   {
-    name: "Публичные данные",
-    icon: EarthIcon,
-    path: "/dashboard/public",
-  },
-  {
     name: "Все файлы",
     icon: LayoutDashboardIcon,
     path: "/dashboard/files",

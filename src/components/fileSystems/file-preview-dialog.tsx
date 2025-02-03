@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FileType } from "../../../types";
 import {
   Dialog,
@@ -16,8 +16,10 @@ import {
   getFileType,
 } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { ChevronRight, DownloadIcon } from "lucide-react";
+import { ChevronRight, DownloadIcon, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { getUserById } from "@/lib/actions/user.actions";
+import { Models } from "node-appwrite";
 
 const FilePreviewDialog = ({
   file,
@@ -28,11 +30,21 @@ const FilePreviewDialog = ({
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
+  const [owner, setOwner] = useState();
+
+  useEffect(() => {
+    const fetchOwner = async () => {
+      const owner = await getUserById({ id: file.ownerId });
+      setOwner(owner);
+    };
+
+    fetchOwner();
+  }, []);
   return (
     <Dialog open={open} onOpenChange={(newOpen) => setOpen(newOpen)}>
       <DialogContent className="bg-card">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-1">
+          <DialogTitle className="flex items-center gap-2">
             <Thumbnail
               url={file.url}
               size={60}
@@ -42,10 +54,10 @@ const FilePreviewDialog = ({
             />
             <div>
               <p>{file.name}</p>
-              <div className="flex gap-4 text-zinc-300 font-normal text-xs">
+              <div className="flex gap-4 items-center text-zinc-300 font-normal text-xs">
                 <p>{convertFileSize(file.size)}</p>
                 <p>{formatDateTime(file.lastModified)}</p>
-                <p>{file.ownerId}</p>
+                <p>{owner ? (owner as Models.Document).fullname : <Loader2 className="animate-spin" />}</p>
               </div>
             </div>
           </DialogTitle>
@@ -64,7 +76,7 @@ const FilePreviewDialog = ({
               controls
               className="max-w-full max-h-[70vh]"
             />
-          ) : getFileType(file.name) === 'audio' ? (
+          ) : getFileType(file.name) === "audio" ? (
             <audio controls className="w-full" src={file.url} />
           ) : (
             <iframe src={file.url} className="w-full h-[70vh] border-none" />

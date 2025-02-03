@@ -28,7 +28,7 @@ export default async function Page({
 
   const searchText = (await searchParams)?.query || "";
   const sort = (await searchParams)?.sort || "";
-  const limit = Number((await searchParams)?.limit) || 25;
+  const limit = Number((await searchParams)?.limit) || 10000;
   if (searchText instanceof Array || sort instanceof Array) return;
 
   if (!filesPageTypes.includes(type)) return notFound();

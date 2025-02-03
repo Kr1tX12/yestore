@@ -25,4 +25,18 @@ export type FolderType = {
 };
 
 
-export type FileFilterType = "image" | "video" | "document" | "audio" | "others";
+export type FileFilterType = "image" | "video" | "document" | "audio" | "other";
+
+export type DashboardStatsType = {
+  allFiles: Models.DocumentList<Models.Document>;
+  totalSize: number;
+  filesCount: number;
+  fileTypes: {
+    [key: FileFilterType]: {
+      count: number;
+      size: number;
+    }
+  };
+  latest5Files: Models.Document[];
+  biggest5Files: Models.Document[];
+}

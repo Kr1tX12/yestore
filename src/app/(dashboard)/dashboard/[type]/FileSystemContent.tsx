@@ -1,14 +1,13 @@
 // FileSystemContent.tsx
 import { getFiles } from "@/lib/actions/files.actions";
-import { convertToFileType, getWordEnding } from "@/lib/utils";
+import { convertFileSize, convertToFileType, getWordEnding } from "@/lib/utils";
 import { FolderType } from "../../../../../types";
 import { FilesPageHeader } from "../files/components/files-page/header/files-pages-header";
 import { FolderNowInfo } from "../files/components/files-page/header/folder-now-info";
 import { FileSystemOptions } from "../files/components/files-page/header/file-system-options";
 import GridFileSystem from "@/components/fileSystems/grid-file-system/GridFileSystem";
 import FileSystemProvider from "@/components/fileSystems/providers/FileSystemProvider";
-import FilesBreadcrumb from "../files/components/files-breadcrumb/files-breadcrumb";
-import Sort from "@/components/ui/sort";
+import { isFolder } from "../../../../lib/utils";
 
 export async function FileSystemContent({
   type,
@@ -22,7 +21,7 @@ export async function FileSystemContent({
   limit: number;
 }) {
   const rootFolder = await getRootFolder([type], searchText, sort, limit);
-
+  
   return (
     <FileSystemProvider rootFolder={rootFolder}>
       <FilesPageHeader>
@@ -31,13 +30,27 @@ export async function FileSystemContent({
       </FilesPageHeader>
       <div className="bg-border h-px my-3" />
       {/* <FilesBreadcrumb className="ml-12 mb-6" /> */}
-      <div className="px-12 flex justify-between w-full">
+      <div className="px-12 flex justify-between w-full mb-2">
         <div className="text-muted-foreground text-sm">
-          Всего: {rootFolder.contents.length} {getWordEnding(rootFolder.contents.length, ["файл", "файла", "файлов"])}
+          Всего: {rootFolder.contents.length}{" "}
+          {getWordEnding(rootFolder.contents.length, [
+            "файл",
+            "файла",
+            "файлов",
+          ])}
+        </div>
+        <div className="text-muted-foreground text-sm">
+          Общий размер:{" "}
+          {convertFileSize(
+            rootFolder.contents.reduce(
+              (acc, file) => acc + (isFolder(file) ? 0 : file.size),
+              0
+            )
+          )}
         </div>
       </div>
       {rootFolder.contents.length > 0 ? (
-        <GridFileSystem hideFirst />
+          <GridFileSystem hideFirst />
       ) : (
         <div className="flex flex-col justify-center items-center size-full gap-4">
           <img

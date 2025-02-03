@@ -30,12 +30,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider attribute="class" defaultTheme="dark">
           <UserProvider>
             <DashboardNavbar />
             <SidebarProvider>
@@ -43,12 +38,10 @@ export default async function RootLayout({
               <main className="w-full">
                 {children}
                 <Toaster />
+                <Footer />
               </main>
-
             </SidebarProvider>
           </UserProvider>
-
-          <Footer />
         </ThemeProvider>
       </body>
     </html>

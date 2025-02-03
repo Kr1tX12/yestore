@@ -1,15 +1,14 @@
 "use server";
 
 import { ID, Models, Query } from "node-appwrite";
-import { UplodaFileProps } from "../../../types";
+import { DashboardStatsType, UplodaFileProps } from "../../../types";
 import { createAdminClient } from "../appwrite";
 import { appwriteConfig } from "../appwrite/config";
 import { InputFile } from "node-appwrite/file";
 import {
-  constructFileUrl,
-  getFileExtension,
+  constructFileUrl, getFileExtension,
   getFileType,
-  parseStringify,
+  parseStringify
 } from "../utils";
 import { getCurrentUser } from "./user.actions";
 import { revalidatePath } from "next/cache";
@@ -73,19 +72,22 @@ export const getFiles = async ({
   searchText,
   sort = "$createdAt-desc",
   limit = 25,
+  page = 1,
 }: {
   types?: string[];
   searchText?: string;
   sort?: string;
   limit?: number;
+  page?: number;
 }) => {
+  const offset = (page - 1) * limit;
   const { databases } = await createAdminClient();
   try {
     const currentUser = await getCurrentUser();
     if (!currentUser) {
       throw new Error("Пользователь не найден");
     }
-    const queries = createQueries(currentUser, types, searchText, sort, limit);
+    const queries = createQueries(currentUser, types, searchText, sort, limit, offset);
     const files = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.filesCollectionId,
@@ -103,7 +105,8 @@ const createQueries = (
   types?: string[],
   searchText?: string,
   sort?: string,
-  limit?: number
+  limit?: number,
+  offset?: number,
 ) => {
   const queries = [
     Query.or([
@@ -116,9 +119,12 @@ const createQueries = (
 
   if (searchText) queries.push(Query.contains("name", searchText));
   if (limit) queries.push(Query.limit(limit));
+  if (offset) queries.push(Query.offset(offset));
   if (sort) {
     const [sortBy, orderBy] = sort.split("-");
-    queries.push(orderBy === 'desc' ? Query.orderDesc(sortBy) : Query.orderAsc(sortBy));
+    queries.push(
+      orderBy === "desc" ? Query.orderDesc(sortBy) : Query.orderAsc(sortBy)
+    );
   }
   return queries;
 };
@@ -203,5 +209,50 @@ export const deleteFile = async ({
     return parseStringify({ status: "success" });
   } catch (error) {
     handleError(error, "Не удалось удалить файл");
+  }
+};
+
+export const getDashboardStats = async (): Promise<DashboardStatsType> => {
+  const allFiles = await getFiles({ limit: 100000, sort: "$createdAt-desc" });
+  const totalSize = allFiles.documents.reduce((acc: number, file: Models.Document) => acc + file.size, 0);
+  const filesCount = allFiles.documents.length;
+  const fileTypes = {
+    image: {
+      size: 0,
+      count: 0,
+    },
+    video: {
+      size: 0,
+      count: 0,
+    },
+    document: {
+      size: 0,
+      count: 0,
+    },
+    audio: {
+      size: 0,
+      count: 0,
+    },
+    other: {
+      size: 0,
+      count: 0,
+    },
+  };
+  const latest5Files = allFiles.documents.slice(0, 5);
+  const biggest5Files = allFiles.documents.sort((a: Models.Document, b: Models.Document) => b.size - a.size).slice(0, 5);
+
+  allFiles.documents.forEach((file: Models.Document) => {
+    const fileType = getFileType(file.name);
+    fileTypes[fileType].size += file.size;
+    fileTypes[fileType].count++;
+  });
+
+  return {
+    allFiles,
+    totalSize,
+    filesCount,
+    fileTypes,
+    latest5Files,
+    biggest5Files,
   }
 };

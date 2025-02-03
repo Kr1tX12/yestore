@@ -7,6 +7,7 @@ import { memo, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useSelected } from "../../providers/SelectedContext";
 import {
+  constructDownloadUrl,
   convertFileSize,
   formatDateTime,
   getFileExtension,
@@ -20,6 +21,7 @@ import { useSingleSelected } from "../../providers/SingleSelectedContext";
 import { FileType, FolderType } from "../../../../../types";
 import FileDeleteDialog from "../../elementMenu/FileDeleteDialog";
 import FileSharingDialog from "../../elementMenu/FileSharingDialog";
+import Link from "next/link";
 
 const ChosenFilesPanel = () => {
   const [mounted, setMounted] = useState(false);
@@ -84,14 +86,22 @@ const ChosenFilesPanel = () => {
         </div>
 
         <div className="flex gap-2 items-center">
-          <Button size="sm" variant="secondary">
-            <DownloadIcon />
-            <div className="flex flex-col">
-              <span className="leading-[14px]">Скачать всё</span>
-              <span className="text-[8px] text-zinc-200 leading-[8px]">
-                {convertFileSize(totalSize ?? 0, 2)}
-              </span>
-            </div>
+          <Button size="sm" variant="secondary" asChild>
+            <Link
+              href={
+                (items && !isFolder(items[0])
+                  ? constructDownloadUrl(items[0].bucketFileId)
+                  : "") ?? ""
+              }
+            >
+              <DownloadIcon />
+              <div className="flex flex-col items-center">
+                <span className="leading-[14px]">Скачать</span>
+                <span className="text-[8px] text-zinc-200 leading-[8px]">
+                  {convertFileSize(totalSize ?? 0, 2)}
+                </span>
+              </div>
+            </Link>
           </Button>
           {items && items.length <= 1 && (
             <Button
